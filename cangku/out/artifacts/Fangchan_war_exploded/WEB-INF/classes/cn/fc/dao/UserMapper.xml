@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fc.dao.UserMapper">
+
+	<select id="login" resultType="Users">
+		select * from users where userName = #{userName} and password= #{password}
+	</select>
+
+    <select id="cha" resultType="cn.fc.pojo.Real_estate">
+		select  id,productName from product
+	</select>
+
+	<select id="chaa" resultType="cn.fc.pojo.Real_estate">
+		select * from product where 1=1
+			<if test="productName != null">
+				and productName = #{productName}
+			</if>
+
+	</select>
+	<resultMap type="cn.fc.pojo.Sale" id="userList">
+		<result property="id" column="id"/>
+		<result property="price" column="price"/>
+		<result property="quantity" column="quantity"/>
+		<result property="totalPrice" column="totalPrice"/>
+		<result property="saleDate" column="saleDate"/>
+		<result property="userId" column="userId"/>
+		<result property="productId" column="productId"/>
+		<result property="realName" column="realname"/>
+		<result property="productName" column="productname"/>
+	</resultMap>
+
+	<select id="getUserList" resultMap="userList">
+		select a.realName as realname,b.* ,c.productName as productname from sale b, users a ,product c where b.userId=a.id AND b.productId=c.id
+		<if test="name != null and name!=''">
+			ORDER BY #{name} DESC
+		</if>
+		 limit #{currentPageNo},#{pageSize}
+	</select>
+
+
+	<insert id="reg" parameterType="Users">
+		insert into users (cardId,name,gender,createTime,password,status)
+				values (#{cardId},#{name},#{gender},#{createTime},#{password},default )
+	</insert>
+
+
+	<select id="getUserCount" resultType="Int">
+		select count(1) as count FROM sale b, users a ,product c
+       WHERE b.userId=a.id AND b.productId=c.id
+	</select>
+
+
+	<select id="getRealById" resultType="real_estate">
+				select u.*,r.* from users u,real_estate r  where  r.id=#{id}
+				 and u.cardId = r.cardId ;
+	</select>
+
+
+	<insert id="add" parameterType="cn.fc.pojo.Sale">
+		insert into sale ()
+				values (DEFAULT,#{price},#{quantity},#{totalPrice},NOW(),#{userId},#{productId})
+	</insert>
+
+	<update id="modify" parameterType="real_estate">
+		update real_estate
+		<trim prefix="set" suffixOverrides="," suffix="where id = #{id}">
+			<if test="cardId != null">cardId=#{cardId},</if>
+<!--			<if test="name != null">name=#{name},</if>-->
+			<if test="projectName != null">projectName=#{projectName},</if>
+			<if test="address != null">address=#{address},</if>
+			<if test="houseType != null">houseType=#{houseType},</if>
+			<if test="area != null">area=#{area},</if>
+			<if test="buildTime != null">buildTime=#{buildTime},</if>
+		</trim>
+	</update>
+
+
+	<delete id="deleteUserById" parameterType="Integer">
+		delete from real_estate where id=#{id}
+	</delete>
+</mapper>

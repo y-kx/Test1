@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Fangchan:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Fangchan_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Fangchan/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Fangchan" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
